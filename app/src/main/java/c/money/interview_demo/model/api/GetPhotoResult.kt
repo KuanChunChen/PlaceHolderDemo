@@ -3,7 +3,7 @@ package c.money.interview_demo.model.api
 import com.google.gson.annotations.SerializedName
 
 
-data class GetPhotoResult(
+abstract class GetPhotoResult(
 
 	@field:SerializedName("albumId")
 	val albumId: Int? = null,

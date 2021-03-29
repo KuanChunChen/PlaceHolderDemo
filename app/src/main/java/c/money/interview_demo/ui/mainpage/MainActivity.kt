@@ -21,7 +21,7 @@ class MainActivity : BaseActivity(), MainPageContract.View {
 
     override fun initView() {
         toolbarWrapper = ToolbarWrapper(this)
-//        toolbarWrapper?.setBackLayoutEnable(false)
+        toolbarWrapper?.setBackLayoutEnable(false)
         textRequestApi.setOnClickListener {
             presenter?.getPlaceHolder()
         }

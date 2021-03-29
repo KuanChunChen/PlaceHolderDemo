@@ -1,32 +1,33 @@
 package c.money.interview_demo.ui.placeholder
 
+import android.graphics.Bitmap
 import c.money.interview_demo.model.api.GetPhotoResult
-import c.money.interview_demo.model.ui.PlaceHolderModel
 import c.money.interview_demo.model.api.Result
 
 interface PlaceHolderContract {
 
 
     interface Repo{
-        fun makeJsonPlaceHolderRequest():Result<GetPhotoResult>
-
+        fun makeJsonPlaceHolderRequest():Result<List<GetPhotoResult>>
+        fun makeImageRequest(url: String): Bitmap?
 
     }
 
     interface Interactor {
-        fun jsonPlaceHolderApi()
-
+        suspend fun jsonPlaceHolderApi():Result<List<GetPhotoResult>>
+        suspend fun makeImageRequestApi(url: String): Bitmap?
     }
 
     interface View {
-        fun setRecyclerViewItem(data: PlaceHolderModel)
-
+        fun setRecyclerViewItem(data: List<GetPhotoResult>)
+        fun setRecyclerViewItem()
     }
 
     interface Presenter {
         fun bindView(view: View)
         fun unbindView()
         fun getDataFromServer()
+        fun getImageFromUrl(url: String)
 
     }
 
