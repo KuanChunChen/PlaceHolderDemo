@@ -1,6 +1,9 @@
 package c.money.interview_demo.model.ui
 
+import c.money.interview_demo.model.api.GetPhotoResult
+
 data class PlaceHolderModel(
 
-    val test: Int = 0
+    var data: GetPhotoResult? = null
+
 )

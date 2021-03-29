@@ -1,21 +1,22 @@
 package c.money.interview_demo.model.api
 
-//import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.SerializedName
+
 
 data class GetPhotoResult(
 
-//	@field:SerializedName("albumId")
+	@field:SerializedName("albumId")
 	val albumId: Int? = null,
 
-//	@field:SerializedName("id")
+	@field:SerializedName("id")
 	val id: Int? = null,
 
-//	@field:SerializedName("title")
+	@field:SerializedName("title")
 	val title: String? = null,
 
-//	@field:SerializedName("url")
+	@field:SerializedName("url")
 	val url: String? = null,
 
-//	@field:SerializedName("thumbnailUrl")
+	@field:SerializedName("thumbnailUrl")
 	val thumbnailUrl: String? = null
 )

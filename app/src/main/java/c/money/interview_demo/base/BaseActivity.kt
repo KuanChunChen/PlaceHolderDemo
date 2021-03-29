@@ -21,11 +21,12 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(contentViewLayout)
 
         setStatusBarColor(this, isTranslate = true, isDarkText = true,
-            bgColor = R.color.white
+            bgColor = R.color.colorIosWhite
         )
 
         initView()
         supportActionBar?.hide()
+
     }
 
 
