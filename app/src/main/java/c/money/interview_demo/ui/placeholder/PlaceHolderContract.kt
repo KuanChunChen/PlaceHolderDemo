@@ -21,19 +21,20 @@ interface PlaceHolderContract {
     interface View {
         fun setRecyclerViewItem(data: List<GetPhotoResult>)
         fun setRecyclerViewItem()
+        fun showErrorMessage(msg: String)
     }
 
     interface Presenter {
         fun bindView(view: View)
         fun unbindView()
         fun getDataFromServer()
-        fun getImageFromUrl(url: String)
+        fun gotoDetailPage(id: String, title: String, url: String)
 
     }
 
 
     interface Router {
-        fun startPlaceHolderDetailFragment()
+        fun startPlaceHolderDetailFragment(id: String, title: String, url: String)
 
     }
 

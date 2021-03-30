@@ -1,5 +1,6 @@
 package c.money.interview_demo.ui.placeholder
 
+
 import android.graphics.Bitmap
 import c.money.interview_demo.base.http.HttpURLConnectionClient
 import c.money.interview_demo.model.api.GetPhotoResult
@@ -32,10 +33,17 @@ class PlaceHolderRepository : PlaceHolderContract.Repo {
 
         }
 
-        val listType: Type = object : TypeToken<List<GetPhotoResult?>?>() {}.type
-        val fromJson: List<GetPhotoResult> = Gson().fromJson(responseData, listType)
+        return try {
+            val listType: Type = object : TypeToken<List<GetPhotoResult?>?>() {}.type
+            val fromJson: List<GetPhotoResult> = Gson().fromJson(responseData, listType)
+            Result.Success(fromJson)
 
-        return Result.Success(fromJson)
+
+        } catch (exception: Exception) {
+            Result.Error(exception)
+
+        }
+
 
     }
 

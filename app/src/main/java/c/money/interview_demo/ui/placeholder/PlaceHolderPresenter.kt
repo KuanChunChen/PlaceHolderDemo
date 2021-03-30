@@ -1,13 +1,7 @@
 package c.money.interview_demo.ui.placeholder
 
-import android.graphics.Bitmap
-import android.util.Log
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import c.money.interview_demo.model.api.Result
+import kotlinx.coroutines.*
 
 class PlaceHolderPresenter constructor(
     private val router: PlaceHolderContract.Router,
@@ -26,38 +20,25 @@ class PlaceHolderPresenter constructor(
         this.contractView = null
     }
 
-    override fun getImageFromUrl(url: String) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
-
-            val result = interactor.makeImageRequestApi(url)
-
-            withContext(Dispatchers.Main) {
-
-                contractView?.setRecyclerViewItem()
-
-            }
-
-
-        }
-
-
+    override fun gotoDetailPage(id: String, title: String, url: String) {
+        router.startPlaceHolderDetailFragment(id, title, url)
     }
 
     override fun getDataFromServer() {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        GlobalScope.launch(Dispatchers.IO) {
 
             val result = interactor.jsonPlaceHolderApi()
 
             withContext(Dispatchers.Main) {
                 when(result){
                     is Result.Success->{
-                        Log.d("satdt", "${Gson().toJson(result.data)}")
+
                         contractView?.setRecyclerViewItem(result.data)
 
                     }
                     is Result.Error->{
-                        Log.d("satdt", "${Gson().toJson(result.exception)}")
+                        contractView?.showErrorMessage(result.exception.message.toString())
                     }
                 }
             }

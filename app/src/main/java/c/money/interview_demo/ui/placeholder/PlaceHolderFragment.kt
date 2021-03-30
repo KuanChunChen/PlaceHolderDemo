@@ -1,26 +1,22 @@
 package c.money.interview_demo.ui.placeholder
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import c.money.interview_demo.R
 import c.money.interview_demo.base.BaseFragment
 import c.money.interview_demo.base.widget.PlaceHolderItemDecoration
 import c.money.interview_demo.base.wrapper.toolbar.ToolbarWrapper
 import c.money.interview_demo.model.api.GetPhotoResult
-import c.money.interview_demo.model.api.Result
 import kotlinx.android.synthetic.main.fragment_placeholder.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class PlaceHolderFragment : BaseFragment() ,PlaceHolderContract.View{
     override fun setRecyclerViewItem() {
 
     }
+
 
 
     private var toolbarWrapper: ToolbarWrapper? = null
@@ -75,8 +71,9 @@ class PlaceHolderFragment : BaseFragment() ,PlaceHolderContract.View{
 
         layoutManager = GridLayoutManager(context, 4)
         placeHolderAdapter = object : PlaceHolderAdapter() {
-            override fun reLoadImageUrl(thumbnailUrl: String) {
-                presenter?.getImageFromUrl(thumbnailUrl)
+
+            override fun onItemClick(id: String, title: String, thumbnailUrl: String) {
+                presenter?.gotoDetailPage(id, title, thumbnailUrl)
 
             }
         }
@@ -93,5 +90,22 @@ class PlaceHolderFragment : BaseFragment() ,PlaceHolderContract.View{
 
     override fun setRecyclerViewItem(data: List<GetPhotoResult>) {
         placeHolderAdapter?.reset(data)
+    }
+
+
+    override fun showErrorMessage(msg: String) {
+
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter?.unbindView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.unbindView()
     }
 }

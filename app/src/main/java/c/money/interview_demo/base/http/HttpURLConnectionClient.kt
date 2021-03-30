@@ -1,13 +1,15 @@
 package c.money.interview_demo.base.http
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import c.money.interview_demo.model.api.GetPhotoResult
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import android.graphics.BitmapFactory
-import android.graphics.Bitmap
-import android.util.Log
 
 
 class HttpURLConnectionClient(hostName: String = HOST_JSON_PLACEHOLDER) {
@@ -51,16 +53,15 @@ class HttpURLConnectionClient(hostName: String = HOST_JSON_PLACEHOLDER) {
         return requestGET(currentHostName!!,endpoint)
     }
 
-
     fun requestBitmap(imageUrl: String): Bitmap? {
-        Log.d("asfdafd","$imageUrl")
         return try {
             val url = URL(imageUrl)
             (url.openConnection() as? HttpURLConnection)?.run {
                 requestMethod = "GET"
                 doInput = true
-                setRequestProperty("User-Agent","User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:7.0.1) Gecko/20100101 Firefox/7.0.1")
-                connect()
+
+                setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_8; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5");
+
                 val responseCode = responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                    return BitmapFactory.decodeStream(inputStream)
@@ -74,6 +75,30 @@ class HttpURLConnectionClient(hostName: String = HOST_JSON_PLACEHOLDER) {
             e.printStackTrace()
             null
         }
+
+    }
+
+    fun parseResponseByOrigin(responseData: String):List<GetPhotoResult?> {
+
+        val jsonObject = JSONObject(responseData)
+        val list = mutableListOf<GetPhotoResult?>()
+
+        val jsonArray: JSONArray = JSONArray(responseData)
+        for (i in 0 until jsonArray.length()) {
+            val jsonRow = jsonArray.getJSONObject(i)
+
+            list.add(
+                GetPhotoResult(
+                    jsonRow.getInt("albumId"),
+                    jsonRow.getInt("id"),
+                    jsonRow.getString("title"),
+                    jsonRow.getString("url"),
+                    jsonRow.getString("thumbnailUrl")
+                )
+            )
+        }
+
+        return list as List<GetPhotoResult>
 
     }
 

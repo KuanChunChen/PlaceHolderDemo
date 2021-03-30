@@ -10,6 +10,8 @@ import c.money.interview_demo.model.api.GetPhotoResult
 
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import c.money.interview_demo.base.http.HttpURLConnectionClient
+import kotlinx.coroutines.*
 
 
 abstract class PlaceHolderAdapter : BaseListAdapter<GetPhotoResult, PlaceHolderAdapter.ViewHolder>() {
@@ -28,22 +30,32 @@ abstract class PlaceHolderAdapter : BaseListAdapter<GetPhotoResult, PlaceHolderA
         private var container: ConstraintLayout = mItemView.findViewById(R.id.layout_container)
 
         override fun bind(position: Int) {
-            textID.text = getItem(position).id.toString()
-            textTitle.text = getItem(position).title.toString()
-
+            val id = getItem(position).id.toString()
+            val title = getItem(position).title.toString()
             val thumbnailUrl = getItem(position).thumbnailUrl.toString()
-            reLoadImageUrl(thumbnailUrl)
-//            Log.d("sdfa","$bitmap")
-//            container.background = BitmapDrawable(mItemView.resources, bitmap)
+            textID.text = id
+            textTitle.text = title
 
+            val split: List<String>? = thumbnailUrl.split("/")
+            val newUrl = "https://ipsumimage.appspot.com/" + split!![split.lastIndex - 1] + "," + split!![split.lastIndex]
+            CoroutineScope(Dispatchers.IO).launch {
+                val result = HttpURLConnectionClient().requestBitmap(newUrl)
+                withContext(Dispatchers.Main) {
 
+                    container.background = BitmapDrawable(mItemView.resources, result)
+
+                }
+
+            }
+            mItemView.setOnClickListener {
+                onItemClick(id, title, thumbnailUrl)
+            }
         }
 
 
     }
 
-    abstract fun reLoadImageUrl(thumbnailUrl: String)
-    fun setTEst(){
+    abstract fun onItemClick(id: String, title: String, thumbnailUrl: String)
 
-    }
+
 }
